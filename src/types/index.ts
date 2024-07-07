@@ -63,10 +63,10 @@ interface IViewConstructor<T, S> {
 
 interface IView<T> { 
   container: HTMLElement;
-	toggleClass(element: HTMLElement, className: string, force?: boolean): void;
-	setText(element: HTMLElement, value: unknown): void;
-	hideElement(element: HTMLElement): void;
-	showElement(element: HTMLElement): void;
-	setImage(element: HTMLElement, src: string, alt?: string): void;
-	render(data?: T): HTMLElement;
+  toggleClass(element: HTMLElement, className: string, force?: boolean): void;
+  setText(element: HTMLElement, value: unknown): void;
+  hideElement(element: HTMLElement): void;
+  showElement(element: HTMLElement): void;
+  setImage(element: HTMLElement, src: string, alt?: string): void;
+  render(data?: T): HTMLElement;
 }
