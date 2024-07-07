@@ -46,11 +46,27 @@ export interface IFormValidity {
 
 type FormErrors = Record<keyof IOrder, string>;
 
-interface IPage {
-  catalog: HTMLElement[];
-  basketCounter: number; 
+export interface IModal {
+  container: HTMLElement;
+  closeButton: HTMLButtonElement;
 }
 
-interface IModal {
-  content: HTMLElement;
+export interface IPage {
+  catalog: HTMLElement[];
+  basketCounter: number; 
+  basket: HTMLElement;
+}
+
+interface IViewConstructor<T, S> {
+  new (settings: S): IView<T>;
+}
+
+interface IView<T> { 
+  container: HTMLElement;
+	toggleClass(element: HTMLElement, className: string, force?: boolean): void;
+	setText(element: HTMLElement, value: unknown): void;
+	hideElement(element: HTMLElement): void;
+	showElement(element: HTMLElement): void;
+	setImage(element: HTMLElement, src: string, alt?: string): void;
+	render(data?: T): HTMLElement;
 }
