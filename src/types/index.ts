@@ -1,72 +1,79 @@
 export interface IAppModel {
-  catalog: ICardList;
-  basket: IBasket;
-  preview: ICard | null;
-  order: IOrder | null;
-}
-
-export interface ICardList {
-  total: number;
-  items: ICard[];
-}
-
-export interface ICard {
-  id: string;
-  description: string;
-  image: string;
-  title: string;
-  category: Category;
-  price: number
-}
-
-export type Category = "софт-скил" | "хард-скил" | "кнопка" | "дополнителное" | "другое";
-
-export interface IBasket {
-  item: ICardList;
-  price: string;
-}
-
-export interface IOrder {
-  paymentMethod: string;
-  address: string;
-  email: string;
-  phoneNumber: string;
-}
-
-export interface IOrderStatus {
-  id: string;
-  total: string;
-  error: string;
-}
-
-export interface IFormValidity {
-  isValid: boolean;
-  errors: FormErrors;
-}
-
-type FormErrors = Record<keyof IOrder, string>;
-
-export interface IModal {
-  container: HTMLElement;
-  closeButton: HTMLButtonElement;
+	catalog: ICard[];
+	basket: IBasket;
+	preview: ICard | null;
+	order: IOrder | null;
 }
 
 export interface IPage {
-  catalog: HTMLElement[];
-  basketCounter: number; 
-  basket: HTMLElement;
+	counter: number;
+	catalog: HTMLElement[];
 }
 
-interface IViewConstructor<T, S> {
-  new (settings: S): IView<T>;
+export interface IModal {
+	content: HTMLElement;
 }
 
-interface IView<T> { 
-  container: HTMLElement;
-  toggleClass(element: HTMLElement, className: string, force?: boolean): void;
-  setText(element: HTMLElement, value: unknown): void;
-  hideElement(element: HTMLElement): void;
-  showElement(element: HTMLElement): void;
-  setImage(element: HTMLElement, src: string, alt?: string): void;
-  render(data?: T): HTMLElement;
+export interface ISuccess {
+	description: string;
 }
+
+export interface ICard {
+	id: string;
+	image: string;
+	title: string;
+	description: string;
+	category: CategoryKey;
+	price: number | null;
+}
+
+export interface ICardList {
+	total: number;
+	items: ICard[];
+}
+
+export type CategoryKey =
+	| 'софт-скил'
+	| 'хард-скил'
+	| 'кнопка'
+	| 'дополнительное'
+	| 'другое';
+
+export type CategoryValue = 'soft' | 'other' | 'additional' | 'button' | 'hard';
+
+export const Category: Record<CategoryKey, CategoryValue> = {
+	['софт-скил']: 'soft',
+	['другое']: 'other',
+	['дополнительное']: 'additional',
+	['кнопка']: 'button',
+	['хард-скил']: 'hard',
+};
+
+export interface IBasket {
+	items: HTMLElement[];
+	price: number;
+}
+
+export interface IOrderForm {
+	address: string;
+	email: string;
+	phone: string;
+	payment: string;
+}
+
+export interface IOrder extends IOrderForm {
+	items: string[];
+	total: number;
+}
+
+export interface IOrderResult extends IOrder {
+	id: string;
+	error?: string;
+}
+
+export interface IFormValidity {
+	valid: boolean;
+	errors: string[];
+}
+
+export type FormErrors = Partial<Record<keyof IOrderForm, string>>;

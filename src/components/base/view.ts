@@ -1,6 +1,5 @@
 export abstract class View<T> {
-	constructor(protected readonly container: HTMLElement) {
-	}
+	constructor(protected readonly container: HTMLElement) {}
 
 	toggleClass(element: HTMLElement, className: string, force?: boolean) {
 		element.classList.toggle(className, force);
