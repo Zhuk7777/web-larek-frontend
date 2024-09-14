@@ -5,7 +5,7 @@ import { IBasket } from '../types';
 
 export class BasketView extends View<IBasket> {
 	private listElement: HTMLElement;
-	private totalElement: HTMLElement;
+	private priceElement: HTMLElement;
 	private buttonElement: HTMLElement;
 
 	constructor(container: HTMLElement, protected events: EventEmitter) {
@@ -15,7 +15,7 @@ export class BasketView extends View<IBasket> {
 			'.basket__list',
 			container
 		);
-		this.totalElement = ensureElement<HTMLSpanElement>(
+		this.priceElement = ensureElement<HTMLSpanElement>(
 			'.basket__price',
 			container
 		);
@@ -47,7 +47,7 @@ export class BasketView extends View<IBasket> {
 		}
 	}
 
-	set total(total: number) {
-		this.setText(this.totalElement, `${total} синапсов`);
+	set price(total: number) {
+		this.setText(this.priceElement, `${total} синапсов`);
 	}
 }

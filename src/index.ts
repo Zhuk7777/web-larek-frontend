@@ -7,13 +7,14 @@ import { BasketView } from './components/basketView';
 import { ModalView } from './components/modalView';
 import { AppModel } from './components/appModel';
 import { OrderView } from './components/orderView';
-import { Page } from './components/pageView';
+import { PageView } from './components/pageView';
 import { ensureElement, cloneTemplate } from './utils/utils';
 import { ICard, IOrderForm, IOrder, FormErrors } from './types';
 import { CatalogCardView } from './components/catalogCardView';
-import { basketCardView } from './components/basketCardView';
+import { BasketCardView } from './components/basketCardView';
 import { PreviewCardView } from './components/previewCardView';
-import { successView } from './components/successView';
+import { SuccessView } from './components/successView';
+import { ContactsOrderView } from './components/contacsOrderView';
 
 const events = new EventEmitter();
 const api = new ShopApi(API_URL, CDN_URL);
@@ -28,13 +29,13 @@ const orderTemplate = ensureElement<HTMLTemplateElement>('#order');
 const contactsTemplate = ensureElement<HTMLTemplateElement>('#contacts');
 const successTemplate = ensureElement<HTMLTemplateElement>('#success');
 
-const page = new Page(document.body, events);
+const page = new PageView(document.body, events);
 const modal = new ModalView(
 	ensureElement<HTMLElement>('#modal-container'),
 	events
 );
 const basket = new BasketView(cloneTemplate(basketTemplate), events);
-const contactsForm = new OrderView(cloneTemplate(contactsTemplate), events);
+const contactsForm = new ContactsOrderView(cloneTemplate(contactsTemplate), events);
 const paymentForm = new OrderView(cloneTemplate(orderTemplate), events);
 
 api.getCards().then(appModel.setCatalog.bind(appModel)).catch(console.error);
@@ -94,7 +95,7 @@ events.on('preview:changed', (item: ICard) => {
 
 events.on('basket:open', () => {
 	const items = appModel.getBasket().map((item, index) => {
-		const basketItem = new basketCardView(
+		const basketItem = new BasketCardView(
 			cloneTemplate(basketCardTemplate),
 			() => events.emit('card:removeFromBasket', item)
 		);
@@ -160,7 +161,7 @@ events.on('contacts:submit', () => {
 		.then((result) => {
 			appModel.clearBasket();
 			events.emit('order:clear');
-			const success = new successView(cloneTemplate(successTemplate), () => {
+			const success = new SuccessView(cloneTemplate(successTemplate), () => {
 				modal.close();
 			});
 
@@ -182,7 +183,7 @@ events.on(
 	}
 );
 
-events.on('paymentformErrors:change', (errors: FormErrors) => {
+events.on('paymentFormErrors:change', (errors: FormErrors) => {
 	const { address, payment } = errors;
 	paymentForm.valid = !address && !payment;
 	paymentForm.errors = Object.values(errors)
@@ -190,7 +191,7 @@ events.on('paymentformErrors:change', (errors: FormErrors) => {
 		.join('; ');
 });
 
-events.on('contactsformErrors:change', (errors: IOrderForm) => {
+events.on('contactsFormErrors:change', (errors: IOrderForm) => {
 	const { email, phone } = errors;
 	contactsForm.valid = !email && !phone;
 	contactsForm.errors = Object.values(errors)

@@ -3,8 +3,8 @@ import { IOrderForm } from '../types';
 import { IEvents } from './base/events';
 import { ensureAllElements } from '../utils/utils';
 
-export class OrderView extends FormView<IOrderForm> {
-	private altButtonsElement?: HTMLButtonElement[];
+export class OrderView extends FormView<Omit<IOrderForm, 'phone' | 'email'>> {
+	private altButtonsElement: HTMLButtonElement[];
 
 	constructor(container: HTMLFormElement, events: IEvents) {
 		super(container, events);
@@ -22,16 +22,6 @@ export class OrderView extends FormView<IOrderForm> {
 				this.method = button.name;
 			});
 		});
-	}
-
-	set phone(value: string) {
-		(this.container.elements.namedItem('phone') as HTMLInputElement).value =
-			value;
-	}
-
-	set email(value: string) {
-		(this.container.elements.namedItem('email') as HTMLInputElement).value =
-			value;
 	}
 
 	set address(value: string) {

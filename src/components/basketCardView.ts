@@ -3,7 +3,7 @@ import { ensureElement } from '../utils/utils';
 import { View } from './base/view';
 import { CardView } from './cardView';
 
-export class basketCardView extends CardView<ICard & { index: number }> {
+export class BasketCardView extends CardView<ICard & { index: number }> {
 	private buttonElement: HTMLButtonElement;
 	private indexElement: HTMLSpanElement;
 

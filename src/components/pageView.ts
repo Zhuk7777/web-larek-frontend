@@ -3,7 +3,7 @@ import { IEvents } from './base/events';
 import { ensureElement } from '../utils/utils';
 import { IPage } from '../types';
 
-export class Page extends View<IPage> {
+export class PageView extends View<IPage> {
 	private counterElement: HTMLSpanElement;
 	private catalogElement: HTMLElement;
 	private wrapperElement: HTMLElement;

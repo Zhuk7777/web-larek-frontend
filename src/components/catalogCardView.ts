@@ -4,13 +4,13 @@ import { ICard } from '../types';
 import { CardView } from './cardView';
 
 export class CatalogCardView extends CardView<ICard> {
-	private imageElemnent: HTMLImageElement;
+	private imageElement: HTMLImageElement;
 	private categoryElement: HTMLSpanElement;
 
 	constructor(container: HTMLElement, onClick: (event: MouseEvent) => void) {
 		super(container);
 
-		this.imageElemnent = ensureElement<HTMLImageElement>(
+		this.imageElement = ensureElement<HTMLImageElement>(
 			'.card__image',
 			container
 		);
@@ -23,11 +23,11 @@ export class CatalogCardView extends CardView<ICard> {
 	}
 
 	set image(src: string) {
-		this.setImage(this.imageElemnent, src, this.titleElement.textContent);
+		this.setImage(this.imageElement, src, this.titleElement.textContent);
 	}
 
 	get image(): string {
-		return this.imageElemnent.src || '';
+		return this.imageElement.src || '';
 	}
 
 	set category(value: CategoryKey) {

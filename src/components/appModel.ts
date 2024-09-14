@@ -62,25 +62,25 @@ export class AppModel extends Model<IAppModel> {
 		}
 	}
 
-	validateOrder(field: keyof IOrder) {
+	private validateOrder(field: keyof IOrder) {
 		const errors: FormErrors = {};
 		if (field !== 'email' && field !== 'phone') {
 			if (!this.order.address) errors.address = 'Необходимо указать адрес';
 			else if (!this.order.payment)
 				errors.address = 'Необходимо выбрать способ оплаты';
 			this.formErrors = errors;
-			this.events.emit('paymentformErrors:change', this.formErrors);
+			this.events.emit('paymentFormErrors:change', this.formErrors);
 			return Object.keys(errors).length === 0;
 		}
 	}
 
-	validateContacts(field: keyof IOrder) {
+	private validateContacts(field: keyof IOrder) {
 		const errors: FormErrors = {};
 		if (field !== 'address' && field !== 'payment') {
 			if (!this.order.email) errors.email = 'Необходимо указать email';
 			if (!this.order.phone) errors.phone = 'Необходимо указать телефон';
 			this.formErrors = errors;
-			this.events.emit('contactsformErrors:change', this.formErrors);
+			this.events.emit('contactsFormErrors:change', this.formErrors);
 			return Object.keys(errors).length === 0;
 		}
 	}

@@ -2,7 +2,7 @@ import { View } from './base/view';
 import { ensureElement } from '../utils/utils';
 import { ISuccess } from '../types';
 
-export class successView extends View<ISuccess> {
+export class SuccessView extends View<ISuccess> {
 	private descriptionElement: HTMLParagraphElement;
 	private closeElement: HTMLElement;
 
