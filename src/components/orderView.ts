@@ -24,6 +24,12 @@ export class OrderView extends FormView<Omit<IOrderForm, 'phone' | 'email'>> {
 		});
 	}
 
+	removeActiveClass() {
+		this.altButtonsElement.forEach((button) => {
+			this.toggleClass(button, 'button_alt-active', false);
+		});
+	}
+
 	set address(value: string) {
 		(this.container.elements.namedItem('address') as HTMLInputElement).value =
 			value;

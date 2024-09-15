@@ -35,7 +35,10 @@ const modal = new ModalView(
 	events
 );
 const basket = new BasketView(cloneTemplate(basketTemplate), events);
-const contactsForm = new ContactsOrderView(cloneTemplate(contactsTemplate), events);
+const contactsForm = new ContactsOrderView(
+	cloneTemplate(contactsTemplate),
+	events
+);
 const paymentForm = new OrderView(cloneTemplate(orderTemplate), events);
 
 api.getCards().then(appModel.setCatalog.bind(appModel)).catch(console.error);
@@ -56,13 +59,11 @@ events.on('catalog:changed', (catalog: ICard[]) => {
 
 events.on('card:addToBasket', (item: ICard) => {
 	appModel.addCardToBasket(item.id);
-	page.counter = appModel.getBasket().length;
 	modal.close();
 });
 
 events.on('card:removeFromBasket', (item: ICard) => {
 	appModel.removeCardFromBasket(item.id);
-	page.counter = appModel.getBasket().length;
 });
 
 events.on('card:select', (item: ICard) => {
@@ -93,8 +94,8 @@ events.on('preview:changed', (item: ICard) => {
 	});
 });
 
-events.on('basket:open', () => {
-	const items = appModel.getBasket().map((item, index) => {
+function renderBasketItems() {
+	return appModel.getBasket().map((item, index) => {
 		const basketItem = new BasketCardView(
 			cloneTemplate(basketCardTemplate),
 			() => events.emit('card:removeFromBasket', item)
@@ -106,6 +107,10 @@ events.on('basket:open', () => {
 			price: item.price,
 		});
 	});
+}
+
+events.on('basket:open', () => {
+	const items = renderBasketItems();
 	modal.render({
 		content: basket.render({
 			items,
@@ -114,14 +119,28 @@ events.on('basket:open', () => {
 	});
 });
 
+events.on('basket:changed', () => {
+	const items = renderBasketItems();
+	basket.render({
+		items,
+		price: appModel.getBasketTotal(),
+	});
+	page.counter = appModel.getBasket().length;
+});
+
 events.on('order:open', () => {
 	modal.render({
 		content: paymentForm.render({
-			address: '',
+			address: appModel.order.address,
+			payment: appModel.order.payment,
 			valid: false,
 			errors: [],
 		}),
 	});
+	if (appModel.order.address || appModel.order.payment) {
+		appModel.validateOrder('address');
+		appModel.validateOrder('payment');
+	}
 });
 
 events.on('payment:set', (data: { paymentMethod: string }) => {
@@ -135,18 +154,23 @@ events.on('payment:set', (data: { paymentMethod: string }) => {
 events.on('order:submit', () => {
 	modal.render({
 		content: contactsForm.render({
-			email: '',
-			phone: '',
+			email: appModel.order.email,
+			phone: appModel.order.phone,
 			valid: false,
 			errors: [],
 		}),
 	});
+	if (appModel.order.email || appModel.order.phone) {
+		appModel.validateContacts('email');
+		appModel.validateContacts('phone');
+	}
 });
 
 events.on('order:clear', () => {
 	appModel.clearBasket();
 	appModel.clearOrder();
 	page.counter = appModel.getBasket().length;
+	paymentForm.removeActiveClass();
 });
 
 events.on('contacts:submit', () => {
